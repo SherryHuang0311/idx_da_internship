@@ -88,3 +88,30 @@ print(sold["PropertyType"].value_counts(dropna=False))
 # property types mostly residential, residential lease, land, manufactured in park, relatively fewer commercial or business
 
 
+# Numeric Distribution Review
+
+## ClosePrice
+sold["ClosePrice"] = pd.to_numeric(sold["ClosePrice"], errors="coerce")
+### histogram
+sold["ClosePrice"].hist(bins=50)
+plt.title("ClosePrice Histogram")
+plt.xlabel("ClosePrice")
+plt.ylabel("Frequency")
+plt.show()
+### boxplot
+plt.boxplot(sold["ClosePrice"].dropna())
+plt.title("ClosePrice Boxplot")
+plt.ylabel("ClosePrice")
+plt.show()
+### IQR outliers
+Q1 = sold["ClosePrice"].quantile(0.25)
+Q3 = sold["ClosePrice"].quantile(0.75)
+IQR = Q3 - Q1
+
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+outliers = sold[(sold["ClosePrice"] < lower) | (sold["ClosePrice"] > upper)]
+outliers[["ClosePrice"]].head()
+
+sold["ClosePrice"].describe()
